@@ -5,6 +5,7 @@
 - [#4690](https://github.com/blockscout/blockscout/pull/4690) - Improve pagination: introduce pagination with random access to pages; Integrate it to the Transactions List page
 
 ### Fixes
+- [#5136](https://github.com/blockscout/blockscout/pull/5136) - Improve contract verification
 - [#5184](https://github.com/blockscout/blockscout/pull/5184) - eth_call method: remove from param from the request, if it is null
 - [#5172](https://github.com/blockscout/blockscout/pull/5172), [#5182](https://github.com/blockscout/blockscout/pull/5182) - Reduced the size of js bundles
 - [#5160](https://github.com/blockscout/blockscout/pull/5160) - Fix blocks validated hint
