@@ -90,7 +90,7 @@
           <%= if Helper.payable?(function) do %>
             <div class="form-group pr-3 d-flex">
               <input type="number" name="function_input" tx-value
-              data-toggle="tooltip" title='Amount in native token <<%= gettext("ETH")%>>' class="form-control form-control-sm address-input-sm" placeholder='value(<%= gettext("ETH")%>)' min="0" step="1e-18" />
+              data-toggle="tooltip" title='Amount in native token <<%= gettext("PLQ")%>>' class="form-control form-control-sm address-input-sm" placeholder='value(<%= gettext("PLQ")%>)' min="0" step="1e-18" />
             </div>
           <% end %>
 
@@ -129,8 +129,8 @@
                     <span data-conversion-unit data-original-value="<%= output["value"] %>"><%= output["value"] %></span>
                     <span class="py-2 px-2">
                       <input class="wei-ether" type="checkbox" autocomplete="off">
-                      <span class="d-inline-block" data-conversion-text-wei><%= gettext("WEI")%></span>
-                      <span class="d-none" data-conversion-text-eth><%= gettext("ETH")%></span>
+                      <span class="d-inline-block" data-conversion-text-wei><%= gettext("aplanq")%></span>
+                      <span class="d-none" data-conversion-text-eth><%= gettext("PLQ")%></span>
                     </span>
                   </div>
                 </div> 
