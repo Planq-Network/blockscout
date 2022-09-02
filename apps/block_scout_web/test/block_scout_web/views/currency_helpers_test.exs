@@ -66,19 +66,29 @@ defmodule BlockScoutWeb.CurrencyHelpersTest do
     test "divide by the given decimal amount" do
       result = CurrencyHelpers.divide_decimals(Decimal.new(1000), Decimal.new(3))
       expected_result = Decimal.new(1)
-      assert Decimal.cmp(result, expected_result) == :eq
+      assert Decimal.compare(result, expected_result) == :eq
     end
 
     test "work when number of decimals is bigger than the number's digits" do
       result = CurrencyHelpers.divide_decimals(Decimal.new(1000), Decimal.new(5))
       expected_result = Decimal.from_float(0.01)
-      assert Decimal.cmp(result, expected_result) == :eq
+      assert Decimal.compare(result, expected_result) == :eq
     end
 
     test "return the same number when number of decimals is 0" do
       result = CurrencyHelpers.divide_decimals(Decimal.new(1000), Decimal.new(0))
       expected_result = Decimal.new(1000)
-      assert Decimal.cmp(result, expected_result) == :eq
+      assert Decimal.compare(result, expected_result) == :eq
+    end
+  end
+
+  describe "transfer_erc20_to_crc20/1" do
+    test "transfer ERC20 to CRC20" do
+      assert CurrencyHelpers.transfer_erc20_to_crc20("ERC-20") == "CRC-20"
+    end
+
+    test "Returns the same value as the one passed in" do
+      assert CurrencyHelpers.transfer_erc20_to_crc20("ERC-1155") == "ERC-1155"
     end
   end
 end

@@ -11,9 +11,6 @@
         <link rel="preload" href="<%= static_path(@conn, "/js/chain.js") %>" as="script">
         <link rel="preload" href="<%= static_path(@conn, "/js/chart-loader.js") %>" as="script">
         <link rel="preload" href="<%= static_path(@conn, "/js/token-transfers-toggle.js") %>" as="script">
-      <% Elixir.BlockScoutWeb.StakesView -> %>
-        <link rel="stylesheet" href="<%= static_path(@conn, "/css/staking.css") %>">
-        <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
       <% _ -> %>
         <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <% end %>
@@ -48,13 +45,50 @@
         'Less than': '<%= gettext("Less than") %>',
         'Market Cap': '<%= gettext("Market Cap") %>',
         'Price': '<%= gettext("Price") %>',
-        'Ether': '<%= gettext("Planq") %>',
+        'Ether': '<%= System.get_env("MAIN_DENOM") || gettext("Planq") %>',
         'Tx/day': '<%= gettext("Tx/day") %>'
       }
     </script>
   </head>
 
   <body>
+    <script defer data-cfasync="false">
+      function applyDarkMode() {
+        if (localStorage.getItem("current-color-mode") === "dark") {
+          document.body.className += " " + "dark-theme-applied";
+          document.body.style.backgroundColor = "#1c1d31";
+        }
+      }
+      window.onload = applyDarkMode()
+    </script>
+    <script defer data-cfasync="false">
+      if (localStorage.getItem("current-color-mode") === "dark") {
+        if (document.getElementById("top-navbar")) {
+          document.getElementById("top-navbar").style.backgroundColor = "#282945";
+        }
+        if (document.getElementById("navbar-logo")) {
+          document.getElementById("navbar-logo").style.filter = "brightness(0) invert(1)";
+        }
+        let modeChanger = document.getElementById("dark-mode-changer");
+        if (modeChanger) {
+          modeChanger.className += " " + "dark-mode-changer--dark";
+        }
+      }
+    </script>
+    <script defer data-cfasync="false">
+      if (localStorage.getItem("current-color-mode") === "dark") {
+        const search = document.getElementById("main-search-autocomplete")
+        const searchMobile = document.getElementById("main-search-autocomplete-mobile")
+            if (search && search.style) {
+          search.style.backgroundColor = "#22223a";
+              search.style.borderColor = "#22223a";
+        }
+        if (searchMobile && searchMobile.style) {
+          searchMobile.style.backgroundColor = "#22223a";
+          searchMobile.style.borderColor = "#22223a";
+        }
+      }
+    </script>
     <% raw_dark_forest_addresses_0_4 = CustomContractsHelpers.get_raw_custom_addresses_list(:dark_forest_addresses) || "" %>
     <% raw_dark_forest_addresses_0_5 = CustomContractsHelpers.get_raw_custom_addresses_list(:dark_forest_addresses_v_0_5) || "" %>
     <% raw_dark_forest_addresses_0_6 = CustomContractsHelpers.get_raw_custom_addresses_list(:dark_forest_addresses_v_0_6) || "" %>
@@ -182,7 +216,8 @@
           <%= raw(System.get_env("MAINTENANCE_ALERT_MESSAGE")) %>
         </div>
       <% end %>
-      <%= if not Explorer.Chain.finished_indexing?() do %>
+      <% show_indexing_status = Application.get_env(:block_scout_web, BlockScoutWeb.Chain)[:show_indexing_status] %>
+      <%= if (not Explorer.Chain.finished_indexing?()) and show_indexing_status do %>
         <div class="alert alert-warning text-center mb-0 p-3" data-selector="indexed-status">
           <%= render BlockScoutWeb.CommonComponentsView, "_loading_spinner.html" %>
           <span data-indexed-ratio="<%=Explorer.Chain.indexed_ratio() %>"></span>
@@ -203,7 +238,6 @@
       @view_module != Elixir.BlockScoutWeb.BlockView &&
       @view_module != Elixir.BlockScoutWeb.BlockTransactionView &&
       @view_module != Elixir.BlockScoutWeb.AddressView &&
-      @view_module != Elixir.BlockScoutWeb.BridgedTokensView &&
       @view_module != Elixir.BlockScoutWeb.TokensView &&
       @view_module != Elixir.BlockScoutWeb.TransactionView &&
       @view_module != Elixir.BlockScoutWeb.PendingTransactionView &&
@@ -265,7 +299,7 @@
     </script>
     <script defer data-cfasync="false">
       if (localStorage.getItem("current-color-mode") === "dark") {
-        document.getElementById("top-navbar").style.backgroundColor = "#282945";
+        document.getElementById("top-navbar").style.backgroundColor = "#0b1426";
         document.getElementById("navbar-logo").style.filter = "brightness(0) invert(1)";
         let modeChanger = document.getElementById("dark-mode-changer");
         modeChanger.className += " " + "dark-mode-changer--dark";

@@ -25,6 +25,8 @@ defmodule EthereumJSONRPC do
   documentation for `EthereumJSONRPC.RequestCoordinator`.
   """
 
+  require Logger
+
   alias EthereumJSONRPC.{
     Block,
     Blocks,
@@ -219,13 +221,7 @@ defmodule EthereumJSONRPC do
   @spec fetch_beneficiaries([block_number], json_rpc_named_arguments) ::
           {:ok, FetchedBeneficiaries.t()} | {:error, reason :: term} | :ignore
   def fetch_beneficiaries(block_numbers, json_rpc_named_arguments) when is_list(block_numbers) do
-    min_block = trace_first_block_to_fetch()
-
-    filtered_block_numbers =
-      block_numbers
-      |> Enum.filter(fn block_number ->
-        block_number >= min_block
-      end)
+    filtered_block_numbers = block_numbers_in_range(block_numbers)
 
     Keyword.fetch!(json_rpc_named_arguments, :variant).fetch_beneficiaries(
       filtered_block_numbers,
@@ -310,18 +306,21 @@ defmodule EthereumJSONRPC do
   Fetches internal transactions for entire blocks from variant API.
   """
   def fetch_block_internal_transactions(block_numbers, json_rpc_named_arguments) when is_list(block_numbers) do
-    min_block = trace_first_block_to_fetch()
-
-    filtered_block_numbers =
-      block_numbers
-      |> Enum.filter(fn block_number ->
-        block_number >= min_block
-      end)
+    filtered_block_numbers = block_numbers_in_range(block_numbers)
 
     Keyword.fetch!(json_rpc_named_arguments, :variant).fetch_block_internal_transactions(
       filtered_block_numbers,
       json_rpc_named_arguments
     )
+  end
+
+  def block_numbers_in_range(block_numbers) do
+    min_block = first_block_to_fetch(:trace_first_block)
+
+    block_numbers
+    |> Enum.filter(fn block_number ->
+      block_number >= min_block
+    end)
   end
 
   @doc """
@@ -484,12 +483,31 @@ defmodule EthereumJSONRPC do
            id_to_params
            |> Blocks.requests(request)
            |> json_rpc(json_rpc_named_arguments) do
+      Enum.each(
+        responses,
+        fn response ->
+          log_response_with_empty_tx(response)
+        end
+      )
+
       {:ok, Blocks.from_responses(responses, id_to_params)}
     end
   end
 
   defp trace_first_block_to_fetch do
     first_block_to_fetch(:trace_first_block)
+  end
+
+  defp log_response_with_empty_tx(response) do
+    result = Map.get(response, "result") || Map.get(response, :result)
+
+    if !is_nil(result) do
+      transactions = Map.get(result, "transactions") || Map.get(result, :transactions)
+
+      if !is_nil(transactions) && transactions == [] do
+        Logger.info("Received block with empty transactions: #{inspect(response)} ")
+      end
+    end
   end
 
   def first_block_to_fetch(config) do
