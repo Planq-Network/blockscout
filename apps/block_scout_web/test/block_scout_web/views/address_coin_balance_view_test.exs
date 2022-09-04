@@ -5,16 +5,16 @@ defmodule BlockScoutWeb.AddressCoinBalanceViewTest do
   alias Explorer.Chain.Wei
 
   describe "format/1" do
-    test "format the wei value in TCRO" do
+    test "format the wei value in APLQ" do
       wei = Wei.from(Decimal.new(1_340_000_000), :gwei)
 
-      assert AddressCoinBalanceView.format(wei) == "13.4 TCRO"
+      assert AddressCoinBalanceView.format(wei) == "13.4 APLQ"
     end
 
     test "format negative values" do
       wei = Wei.from(Decimal.new(-1_340_000_000), :gwei)
 
-      assert AddressCoinBalanceView.format(wei) == "-13.4 TCRO"
+      assert AddressCoinBalanceView.format(wei) == "-13.4 APLQ"
     end
   end
 
@@ -50,13 +50,13 @@ defmodule BlockScoutWeb.AddressCoinBalanceViewTest do
     test "format positive values" do
       value = Decimal.new(1_340_000_000_000_000_000)
 
-      assert AddressCoinBalanceView.format_delta(value) == "1.34 TCRO"
+      assert AddressCoinBalanceView.format_delta(value) == "1.34 APLQ"
     end
 
     test "format negative values" do
       value = Decimal.new(-1_340_000_000_000_000_000)
 
-      assert AddressCoinBalanceView.format_delta(value) == "1.34 TCRO"
+      assert AddressCoinBalanceView.format_delta(value) == "1.34 APLQ"
     end
   end
 end

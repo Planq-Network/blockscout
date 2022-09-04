@@ -14,7 +14,7 @@ defmodule BlockScoutWeb.BlockViewTest do
         |> with_block(block)
       end)
 
-      assert "5.5 basetcro" == BlockView.average_gas_price(Repo.preload(block, [:transactions]))
+      assert "5.5 aplanq" == BlockView.average_gas_price(Repo.preload(block, [:transactions]))
     end
   end
 
@@ -91,7 +91,7 @@ defmodule BlockScoutWeb.BlockViewTest do
 
       block = Repo.preload(block, :rewards)
 
-      assert BlockView.combined_rewards_value(block) == "3.000042 TCRO"
+      assert BlockView.combined_rewards_value(block) == "3.000042 APLQ"
     end
   end
 end
