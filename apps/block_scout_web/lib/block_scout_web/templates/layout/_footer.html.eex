@@ -22,7 +22,7 @@
         <p class="footer-info-text">
           <%= gettext("Copyright © ")%>
           <%= copyright_year() %>
-          <%= gettext(" CRO Protocol Labs. All rights reserved.")%>
+          <%= gettext(" Planq Network. All rights reserved.")%>
 
           <a href="https://github.com/blockscout/blockscout" rel="noreferrer" class="footer-link" target="_blank"><%= gettext(" Powered by Blockscout") %></a>
         </p>
