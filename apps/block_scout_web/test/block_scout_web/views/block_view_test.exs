@@ -14,7 +14,7 @@ defmodule BlockScoutWeb.BlockViewTest do
         |> with_block(block)
       end)
 
-      assert "5.5 aplanq" == BlockView.average_gas_price(Repo.preload(block, [:transactions]))
+      assert "55 Gwei" == BlockView.average_gas_price(Repo.preload(block, [:transactions]))
     end
   end
 
@@ -34,8 +34,9 @@ defmodule BlockScoutWeb.BlockViewTest do
     test "returns Uncle" do
       uncle = insert(:block, consensus: false)
       insert(:block_second_degree_relation, uncle_hash: uncle.hash)
+      preloaded = Repo.preload(uncle, :nephews)
 
-      assert BlockView.block_type(uncle) == "Uncle"
+      assert BlockView.block_type(preloaded) == "Uncle"
     end
   end
 
@@ -91,7 +92,7 @@ defmodule BlockScoutWeb.BlockViewTest do
 
       block = Repo.preload(block, :rewards)
 
-      assert BlockView.combined_rewards_value(block) == "3.000042 APLQ"
+      assert BlockView.combined_rewards_value(block) == "3.000042 ETH"
     end
   end
 end
