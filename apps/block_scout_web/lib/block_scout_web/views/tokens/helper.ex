@@ -8,11 +8,9 @@ defmodule BlockScoutWeb.Tokens.Helper do
 
   @doc """
   Returns the token transfers' amount according to the token's type and decimals.
-
   When the token's type is ERC-20, then we are going to format the amount according to the token's
   decimals considering 0 when the decimals is nil. Case the amount is nil, this function will
   return the symbol `--`.
-
   When the token's type is ERC-721, the function will return a string with the token_id that
   represents the ERC-721 token since this kind of token doesn't have amount and decimals.
   """
@@ -101,20 +99,18 @@ defmodule BlockScoutWeb.Tokens.Helper do
 
   @doc """
   Returns the token's symbol.
-
   When the token's symbol is nil, the function will return the contract address hash.
   """
   def token_symbol(%Token{symbol: nil, contract_address_hash: address_hash}) do
     AddressView.short_hash_left_right(address_hash)
   end
 
-  def token_symbol(%Token{symbol: symbol, contract_address_hash: address_hash}) do
-    CurrencyHelpers.luna_to_lunc(symbol, address_hash)
+  def token_symbol(%Token{symbol: symbol}) do
+    symbol
   end
 
   @doc """
   Returns the token's name.
-
   When the token's name is nil, the function will return the contract address hash.
   """
   def token_name(%Token{} = token), do: build_token_name(token)
@@ -124,7 +120,7 @@ defmodule BlockScoutWeb.Tokens.Helper do
     AddressView.short_hash_left_right(address_hash)
   end
 
-  defp build_token_name(%{name: name, contract_address_hash: address_hash}) do
-    CurrencyHelpers.luna_to_lunc(name, address_hash)
+  defp build_token_name(%{name: name}) do
+    name
   end
 end
